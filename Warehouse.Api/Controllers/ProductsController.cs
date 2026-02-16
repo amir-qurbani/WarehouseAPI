@@ -24,9 +24,17 @@ namespace WarehouseAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            // Controllern frågar bara servicen: "Ge mig produkterna"
-            var products = await _productService.GetAllProductsAsync();
-            return Ok(products);
+            try
+            {
+                // Controllern frågar bara servicen: "Ge mig produkterna"
+                var products = await _productService.GetAllProductsAsync();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                // Istället för att krascha, skickar vi 500 Internal Server Error
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPost]

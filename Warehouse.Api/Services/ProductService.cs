@@ -13,7 +13,18 @@ namespace WarehouseAPI.Services
         }
         public async Task<IEnumerable<Product>> GetAllProductsAsync()
         {
-            return await _context.Products.ToListAsync();
+            try
+            {
+                return await _context.Products.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (you can use a logging framework like Serilog, NLog, etc.)
+                Console.WriteLine($"An error occurred while fetching products: {ex.Message}");
+                // Return an empty list or handle it as per your application's needs
+                throw new Exception("An error occurred while fetching products. Please try again later.");
+            }
+
         }
         public async Task<Product> AddProductAsync(Product product)
         {
